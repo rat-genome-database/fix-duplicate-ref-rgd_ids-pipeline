@@ -1,0 +1,25 @@
+TODO:
+    assign created_by key to this pipeline
+    move sql code to rgdcore
+
+ver 1.0.6, Sep 24, 2018
+  moved from subversion to github
+
+ver 1.0.5, May 21, 2018
+  updated from java 7 to java 8; updated from spring 3.x to spring 4.x
+
+ver 1.0.4, Dec 27, 2016
+  referenced objects are now correctly merged
+  updated build from ANT to GRADLE
+
+ver 1.0.3, Feb 8, 2016
+  improved maintainability: replaced some custom DAO queries with rgdcore queries
+  improved logging
+
+ver 1.0.2, Jan 8, 2016
+  improved logging
+
+ver 1.0.1, Oct 10, 2014
+  fixed script to display the correct server name
+  better logging
+  updated jars
