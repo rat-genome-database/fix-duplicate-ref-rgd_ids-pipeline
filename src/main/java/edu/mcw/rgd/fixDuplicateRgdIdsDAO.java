@@ -5,7 +5,6 @@ import edu.mcw.rgd.dao.impl.AssociationDAO;
 import edu.mcw.rgd.dao.impl.RGDManagementDAO;
 import edu.mcw.rgd.dao.impl.ReferenceDAO;
 import edu.mcw.rgd.dao.spring.XdbQuery;
-import edu.mcw.rgd.datamodel.Reference;
 import edu.mcw.rgd.datamodel.RgdId;
 import edu.mcw.rgd.datamodel.XdbId;
 import edu.mcw.rgd.datamodel.ontology.Annotation;
@@ -13,16 +12,18 @@ import edu.mcw.rgd.datamodel.ontology.Annotation;
 import java.util.List;
 
 /**
- * Created by IntelliJ IDEA.
- * User: pjayaraman
- * Date: 11/19/12
- * Time: 11:56 AM
+ * @author pjayaraman
+ * @since 11/19/12
  */
 public class fixDuplicateRgdIdsDAO {
     AnnotationDAO annDao = new AnnotationDAO();
     RGDManagementDAO rgdDao = new RGDManagementDAO();
     ReferenceDAO refDao = new ReferenceDAO();
     AssociationDAO assDao = new AssociationDAO();
+
+    public String getConnectionInfo() {
+        return refDao.getConnectionInfo();
+    }
 
     //get all active rgdids that are more than one rgdid for given pubmed Id.
     public List<XdbId> getPubmedIdsWithMultipleReferenceRgdIds(int xdbKey) throws Exception{

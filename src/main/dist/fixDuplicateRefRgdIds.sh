@@ -8,4 +8,4 @@ if [ "$SERVER" == "REED" ]; then
 fi
 
 $APP_HOME/_run.sh > $APP_HOME/run.log  2>&1
-mailx -s "[$SERVER] Fix duplicate RGD References pipeline ran" $EMAIL_LIST < $APP_HOME/logs/status.log
+mailx -s "[$SERVER] Fix duplicate RGD References pipeline ran" $EMAIL_LIST < $APP_HOME/logs/summary.log

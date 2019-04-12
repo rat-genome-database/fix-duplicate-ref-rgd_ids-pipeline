@@ -2,6 +2,9 @@ TODO:
     assign created_by key to this pipeline
     move sql code to rgdcore
 
+ver 1.0.8, Apr 12, 2019
+  updated logging
+
 ver 1.0.7, Jan 9, 2019
   refactored build.gradle
 

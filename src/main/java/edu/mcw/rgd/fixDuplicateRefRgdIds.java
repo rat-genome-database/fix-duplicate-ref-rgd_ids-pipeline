@@ -3,11 +3,13 @@ package edu.mcw.rgd;
 import edu.mcw.rgd.datamodel.RgdId;
 import edu.mcw.rgd.datamodel.XdbId;
 import edu.mcw.rgd.datamodel.ontology.Annotation;
+import edu.mcw.rgd.process.Utils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.core.io.FileSystemResource;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -16,28 +18,37 @@ import java.util.*;
  */
 public class fixDuplicateRefRgdIds {
 
-    fixDuplicateRgdIdsDAO fixDupDao = new fixDuplicateRgdIdsDAO();
+    fixDuplicateRgdIdsDAO dao = new fixDuplicateRgdIdsDAO();
     private int xdbKey = XdbId.XDB_KEY_PUBMED;
-    private static final Logger logStatus = Logger.getLogger("log_status");
-    private static final Logger logUpdates = Logger.getLogger("log_updates");
+    private final Logger logStatus = Logger.getLogger("status");
+    private final Logger logUpdates = Logger.getLogger("log_updates");
     private String version;
 
     public static void main(String args[]) throws Exception{
         DefaultListableBeanFactory bf = new DefaultListableBeanFactory();
         new XmlBeanDefinitionReader(bf).loadBeanDefinitions(new FileSystemResource("properties/AppConfigure.xml"));
         fixDuplicateRefRgdIds manager = (fixDuplicateRefRgdIds) (bf.getBean("duplicateRgdIds"));
-        manager.run();
+        try {
+            manager.run();
+        } catch( Exception e) {
+            Utils.printStackTrace(e, manager.logStatus);
+            throw e;
+        }
     }
 
 
     public void run() throws Exception {
+        long time0 = System.currentTimeMillis();
         logStatus.info(getVersion());
+        logStatus.info("   "+dao.getConnectionInfo());
+        SimpleDateFormat sdt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        logStatus.info("   started at "+sdt.format(new Date()));
 
         // map of duplicate PMIDs:  PMID to set of REF_RGD_IDs
         Map<String, Set<Integer>> pmidToList = new HashMap<>();
 
         //get list of xdbid objects that contain more than one ACTIVE rgdId for given pubmed Id.
-        List<XdbId> xdbIdsToBeFixed = fixDupDao.getPubmedIdsWithMultipleReferenceRgdIds(xdbKey);
+        List<XdbId> xdbIdsToBeFixed = dao.getPubmedIdsWithMultipleReferenceRgdIds(xdbKey);
         logStatus.info("Count of duplicate references: "+xdbIdsToBeFixed.size());
 
         for( XdbId xdbId: xdbIdsToBeFixed ) {
@@ -65,7 +76,7 @@ public class fixDuplicateRefRgdIds {
 
             //get RGDId Object that is newest. replace the other annotations with the "replacementRgdId"
             for (int rgdIdNum : listOfRgdIds) {
-                RgdId rgdObj = fixDupDao.getActiveRgdObject(rgdIdNum);
+                RgdId rgdObj = dao.getActiveRgdObject(rgdIdNum);
                 if (rgdObj != null) {
                     rgdObjectsList.add(rgdObj);
                 }
@@ -81,8 +92,8 @@ public class fixDuplicateRefRgdIds {
                 }
 
                 //update annotation in full Annot table
-                List<Annotation> annList = fixDupDao.getListAnnotsByRefRgdId(rgdNumber);
-                List<Annotation> newAnnObjList = fixDupDao.getListAnnotsByRefRgdId(replacementRGdId);
+                List<Annotation> annList = dao.getListAnnotsByRefRgdId(rgdNumber);
+                List<Annotation> newAnnObjList = dao.getListAnnotsByRefRgdId(replacementRGdId);
 
                 for (Annotation annObjTobeModified : annList) {
 
@@ -107,7 +118,7 @@ public class fixDuplicateRefRgdIds {
 
                         annObjTobeModified.setRefRgdId(replacementRGdId);
                         annObjTobeModified.setLastModifiedDate(new Date());
-                        fixDupDao.updateAnnotationObject(annObjTobeModified);
+                        dao.updateAnnotationObject(annObjTobeModified);
 
                         logUpdates.debug("Updated annotation: "+annObjTobeModified.dump("|"));
                     }
@@ -115,31 +126,31 @@ public class fixDuplicateRefRgdIds {
 
 
                 //get list of associated object rgdIds with the reference to be changed.
-                List<Integer> rgdidsAssociatedWithRef = fixDupDao.getAnnotatedRgdidsGivenRef(rgdNumber);
+                List<Integer> rgdidsAssociatedWithRef = dao.getAnnotatedRgdidsGivenRef(rgdNumber);
 
                 //update all those rows with the new reference
                 for (Integer rgdIdOfObjAssociatedWithRef : rgdidsAssociatedWithRef) {
                     logMsg("Removing association of Old RefRgdId:" + rgdNumber + " with RgdId: " + rgdIdOfObjAssociatedWithRef);
-                    fixDupDao.removeOldReferenceAssociation(rgdNumber, rgdIdOfObjAssociatedWithRef);
+                    dao.removeOldReferenceAssociation(rgdNumber, rgdIdOfObjAssociatedWithRef);
 
                     logMsg("Inserting association of New RefRgdId:" + replacementRGdId + " with RgdId: " + rgdIdOfObjAssociatedWithRef);
-                    fixDupDao.insertReferenceeAssociation(rgdIdOfObjAssociatedWithRef, replacementRGdId);
+                    dao.insertReferenceeAssociation(rgdIdOfObjAssociatedWithRef, replacementRGdId);
                 }
 
 
                 //make older Rgdid "withdrawn"
                 logMsg("Withdrawing Old RefRgdId: " + rgdNumber);
-                fixDupDao.retireOldrefRgdId(rgdNumber);
+                dao.retireOldrefRgdId(rgdNumber);
 
                 //record in rgdid History
                 logMsg("Recording in RGD_ID_HISTORY: OldRgdId: " + rgdNumber + " replacementRgdId:" + replacementRGdId);
-                fixDupDao.recordRetiredRefRgdidHistory(rgdNumber, replacementRGdId);
+                dao.recordRetiredRefRgdidHistory(rgdNumber, replacementRGdId);
 
                 logMsg("======");
             }
         }
 
-        logStatus.info("OK!");
+        logMsg("OK! -- elapsed "+Utils.formatElapsedTime(time0, System.currentTimeMillis()));
     }
 
     void logMsg(String msg) {
