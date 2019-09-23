@@ -2,6 +2,9 @@ TODO:
     assign created_by key to this pipeline
     move sql code to rgdcore
 
+Sep 23, 2019
+  logging tuneup
+  
 ver 1.0.8, Apr 12, 2019
   updated logging
 

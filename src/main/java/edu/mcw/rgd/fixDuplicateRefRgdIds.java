@@ -49,7 +49,6 @@ public class fixDuplicateRefRgdIds {
 
         //get list of xdbid objects that contain more than one ACTIVE rgdId for given pubmed Id.
         List<XdbId> xdbIdsToBeFixed = dao.getPubmedIdsWithMultipleReferenceRgdIds(xdbKey);
-        logStatus.info("Count of duplicate references: "+xdbIdsToBeFixed.size());
 
         for( XdbId xdbId: xdbIdsToBeFixed ) {
             Set<Integer> refRgdIds = pmidToList.get(xdbId.getAccId());
@@ -61,6 +60,7 @@ public class fixDuplicateRefRgdIds {
         }
 
         Collection<String> pmidAccKeys = pmidToList.keySet();
+        logStatus.info("Count of duplicate references: "+pmidAccKeys.size());
 
         //for each pmid acc, get the list of rGDIdsused.
         //for each of the rgdIds
@@ -83,7 +83,8 @@ public class fixDuplicateRefRgdIds {
             }
 
             int replacementRGdId = getMostRecentRgdId(rgdObjectsList);
-            logMsg("Duplicate reference for PMID:"+pubmedAcc+"; replacement RgdId = RGD:" + replacementRGdId);
+            logMsg("  duplicate reference for PMID:"+pubmedAcc);
+            logMsg("  replacement RGD:" + replacementRGdId);
 
             //for those rgdids that arent replacementRgdIds,
             for (int rgdNumber : listOfRgdIds) {
@@ -113,8 +114,8 @@ public class fixDuplicateRefRgdIds {
                     }
 
                     if (sameannotYesFlag == 0) {
-                        logMsg("Updating RefRgdId for Annotation: RGDID:" + annObjTobeModified.getAnnotatedObjectRgdId()
-                                +" PMID:"+ pubmedAcc+" Old RefRgdId : " + rgdNumber + " NewRefRgdId: " + replacementRGdId);
+                        logMsg("  updating RefRgdId for Annotation: RGD:" + annObjTobeModified.getAnnotatedObjectRgdId()+" PMID:"+ pubmedAcc);
+                        logMsg("    Old RefRgdId : " + rgdNumber + " NewRefRgdId: " + replacementRGdId);
 
                         annObjTobeModified.setRefRgdId(replacementRGdId);
                         annObjTobeModified.setLastModifiedDate(new Date());
@@ -130,20 +131,20 @@ public class fixDuplicateRefRgdIds {
 
                 //update all those rows with the new reference
                 for (Integer rgdIdOfObjAssociatedWithRef : rgdidsAssociatedWithRef) {
-                    logMsg("Removing association of Old RefRgdId:" + rgdNumber + " with RgdId: " + rgdIdOfObjAssociatedWithRef);
+                    logMsg("  removing association of Old RefRgdId:" + rgdNumber + " with RgdId: " + rgdIdOfObjAssociatedWithRef);
                     dao.removeOldReferenceAssociation(rgdNumber, rgdIdOfObjAssociatedWithRef);
 
-                    logMsg("Inserting association of New RefRgdId:" + replacementRGdId + " with RgdId: " + rgdIdOfObjAssociatedWithRef);
+                    logMsg("  inserting association of New RefRgdId:" + replacementRGdId + " with RgdId: " + rgdIdOfObjAssociatedWithRef);
                     dao.insertReferenceeAssociation(rgdIdOfObjAssociatedWithRef, replacementRGdId);
                 }
 
 
                 //make older Rgdid "withdrawn"
-                logMsg("Withdrawing Old RefRgdId: " + rgdNumber);
+                logMsg("  withdrawing Old RefRgdId: " + rgdNumber);
                 dao.retireOldrefRgdId(rgdNumber);
 
                 //record in rgdid History
-                logMsg("Recording in RGD_ID_HISTORY: OldRgdId: " + rgdNumber + " replacementRgdId:" + replacementRGdId);
+                logMsg("  recording in RGD_ID_HISTORY: OldRgdId: " + rgdNumber + " replacementRgdId:" + replacementRGdId);
                 dao.recordRetiredRefRgdidHistory(rgdNumber, replacementRGdId);
 
                 logMsg("======");
