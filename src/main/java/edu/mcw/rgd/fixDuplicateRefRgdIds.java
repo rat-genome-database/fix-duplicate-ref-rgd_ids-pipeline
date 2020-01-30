@@ -19,7 +19,6 @@ import java.util.*;
 public class fixDuplicateRefRgdIds {
 
     fixDuplicateRgdIdsDAO dao = new fixDuplicateRgdIdsDAO();
-    private int xdbKey = XdbId.XDB_KEY_PUBMED;
     private final Logger logStatus = Logger.getLogger("status");
     private final Logger logUpdates = Logger.getLogger("log_updates");
     private String version;
@@ -48,7 +47,7 @@ public class fixDuplicateRefRgdIds {
         Map<String, Set<Integer>> pmidToList = new HashMap<>();
 
         //get list of xdbid objects that contain more than one ACTIVE rgdId for given pubmed Id.
-        List<XdbId> xdbIdsToBeFixed = dao.getPubmedIdsWithMultipleReferenceRgdIds(xdbKey);
+        List<XdbId> xdbIdsToBeFixed = dao.getPubmedIdsWithMultipleReferenceRgdIds();
 
         for( XdbId xdbId: xdbIdsToBeFixed ) {
             Set<Integer> refRgdIds = pmidToList.get(xdbId.getAccId());
@@ -178,15 +177,6 @@ public class fixDuplicateRefRgdIds {
         }
 
         return mostRecentRgdId;
-    }
-
-
-    public void setXdbKey(int xdbKey) {
-        this.xdbKey = xdbKey;
-    }
-
-    public int getXdbKey() {
-        return xdbKey;
     }
 
     public void setVersion(String version) {

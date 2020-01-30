@@ -2,8 +2,7 @@
 
 <beans>
     <bean id="duplicateRgdIds" class="edu.mcw.rgd.fixDuplicateRefRgdIds">
-        <property name="version" value="FixDuplicateRefRgdIds   build Sep 23, 2019" />
-        <property name="xdbKey" value="2" />
+        <property name="version" value="FixDuplicateRefRgdIds   -- build Jan 30, 2020" />
     </bean>
 </beans>
 

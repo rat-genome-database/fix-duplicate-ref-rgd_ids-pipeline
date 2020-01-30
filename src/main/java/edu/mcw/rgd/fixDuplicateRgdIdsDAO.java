@@ -3,7 +3,6 @@ package edu.mcw.rgd;
 import edu.mcw.rgd.dao.impl.AnnotationDAO;
 import edu.mcw.rgd.dao.impl.AssociationDAO;
 import edu.mcw.rgd.dao.impl.RGDManagementDAO;
-import edu.mcw.rgd.dao.impl.ReferenceDAO;
 import edu.mcw.rgd.dao.spring.XdbQuery;
 import edu.mcw.rgd.datamodel.RgdId;
 import edu.mcw.rgd.datamodel.XdbId;
@@ -18,37 +17,28 @@ import java.util.List;
 public class fixDuplicateRgdIdsDAO {
     AnnotationDAO annDao = new AnnotationDAO();
     RGDManagementDAO rgdDao = new RGDManagementDAO();
-    ReferenceDAO refDao = new ReferenceDAO();
     AssociationDAO assDao = new AssociationDAO();
 
     public String getConnectionInfo() {
-        return refDao.getConnectionInfo();
+        return annDao.getConnectionInfo();
     }
 
     //get all active rgdids that are more than one rgdid for given pubmed Id.
-    public List<XdbId> getPubmedIdsWithMultipleReferenceRgdIds(int xdbKey) throws Exception{
+    public List<XdbId> getPubmedIdsWithMultipleReferenceRgdIds() throws Exception{
 
-        String query = "SELECT acc.*,i.*\n" +
-                "FROM rgd_acc_xdb acc, references ref, rgd_ids i\n" +
-                "WHERE acc.rgd_id=ref.rgd_id\n" +
-                "and acc.rgd_id=i.rgd_id\n" +
-                "and i.OBJECT_STATUS='ACTIVE'\n" +
-                "and acc.XDB_KEY=? and \n" +
-                "acc.ACC_ID in\n" +
-                "(\n" +
-                "select x.ACC_ID\n" +
-                "FROM rgd_acc_xdb x, references r, rgd_ids rgd\n" +
-                "where x.rgd_id=r.rgd_id\n" +
-                "and x.rgd_id=rgd.rgd_id\n" +
-                "and rgd.OBJECT_STATUS='ACTIVE'\n" +
-                "and x.XDB_KEY=?\n" +
-                "group by x.ACC_ID\n" +
-                "having count(x.ACC_ID) > 1\n" +
+        String query = "SELECT a.*  FROM rgd_acc_xdb a, references r, rgd_ids i\n" +
+                "WHERE a.rgd_id=r.rgd_id  AND  a.rgd_id=i.rgd_id\n" +
+                " AND i.object_status='ACTIVE'  AND   a.xdb_key=2" +
+                " AND a.ACC_ID IN(\n" +
+                "  SELECT acc_id FROM rgd_acc_xdb x, references f, rgd_ids d\n" +
+                "  WHERE x.rgd_id=f.rgd_id  AND  x.rgd_id=d.rgd_id\n" +
+                "    AND d.object_status='ACTIVE'  AND  x.xdb_key=2\n" +
+                "  GROUP BY x.acc_id HAVING COUNT(x.acc_id) > 1\n" +
                 ")\n" +
-                "order by acc.ACC_ID";
+                "ORDER BY a.acc_id";
 
-        XdbQuery xq = new XdbQuery(refDao.getDataSource(), query);
-        return refDao.execute(xq, xdbKey, xdbKey);
+        XdbQuery q = new XdbQuery(annDao.getDataSource(), query);
+        return annDao.execute(q);
     }
 
     public List<Annotation> getListAnnotsByRefRgdId(int refRgdid) throws Exception {
