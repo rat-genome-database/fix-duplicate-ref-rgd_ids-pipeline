@@ -1,6 +1,9 @@
 TODO:
     move sql code to rgdcore
 
+May 10, 2020
+  updated jar dependencies
+
 Jan 30, 2020
   simplified code
   
