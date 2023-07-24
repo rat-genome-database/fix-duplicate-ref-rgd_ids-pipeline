@@ -30,7 +30,7 @@ public class fixDuplicateRefRgdIds {
         try {
             manager.run();
         } catch( Exception e) {
-            Utils.printStackTrace(e, manager.logStatus);
+            //Utils.printStackTrace(e, manager.logStatus);
             throw e;
         }
     }
