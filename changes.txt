@@ -1,6 +1,9 @@
 TODO:
     move sql code to rgdcore
 
+Jul 24, 2023
+  upgraded build.gradle to be compatible with newer major versions of gradle
+
 May 10, 2020
   updated jar dependencies
 
