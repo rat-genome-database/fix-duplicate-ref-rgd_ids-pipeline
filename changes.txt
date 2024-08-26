@@ -1,6 +1,9 @@
 TODO:
     move sql code to rgdcore
 
+Aug 26, 2024
+  renamed distro to 'fix-duplicate-ref-rgd-ids-pipeline'
+
 Feb 13, 2024
   updated to java 17
 

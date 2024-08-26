@@ -1,6 +1,6 @@
 # script env setup
 #
-APP_HOME=/home/rgddata/pipelines/fixDuplicateRefRgdIds
+APP_HOME="/home/rgddata/pipelines/fix-duplicate-ref-rgd-ids-pipeline"
 SERVER=`hostname -s | tr '[a-z]' '[A-Z]'`
 EMAIL_LIST=mtutaj@mcw.edu
 if [ "$SERVER" == "REED" ]; then

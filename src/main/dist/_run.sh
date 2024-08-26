@@ -2,7 +2,7 @@
 # shell script to run fixDuplicateRefRgdIds pipeline
 . /etc/profile
 
-APPNAME=fixDuplicateRefRgdIds
+APPNAME="fix-duplicate-ref-rgd-ids-pipeline"
 APPDIR=/home/rgddata/pipelines/$APPNAME
 
 cd $APPDIR
