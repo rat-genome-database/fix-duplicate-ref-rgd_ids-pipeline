@@ -4,7 +4,8 @@ import edu.mcw.rgd.datamodel.RgdId;
 import edu.mcw.rgd.datamodel.XdbId;
 import edu.mcw.rgd.datamodel.ontology.Annotation;
 import edu.mcw.rgd.process.Utils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.core.io.FileSystemResource;
@@ -19,8 +20,8 @@ import java.util.*;
 public class fixDuplicateRefRgdIds {
 
     fixDuplicateRgdIdsDAO dao = new fixDuplicateRgdIdsDAO();
-    private final Logger logStatus = Logger.getLogger("status");
-    private final Logger logUpdates = Logger.getLogger("log_updates");
+    private final Logger logStatus = LogManager.getLogger("status");
+    private final Logger logUpdates = LogManager.getLogger("log_updates");
     private String version;
 
     public static void main(String args[]) throws Exception{
@@ -30,7 +31,7 @@ public class fixDuplicateRefRgdIds {
         try {
             manager.run();
         } catch( Exception e) {
-            //Utils.printStackTrace(e, manager.logStatus);
+            Utils.printStackTrace(e, manager.logStatus);
             throw e;
         }
     }

@@ -1,6 +1,9 @@
 TODO:
     move sql code to rgdcore
 
+Nov 26, 2024
+  upgraded to log4j2
+
 Nov 12, 2024
   renamed github branch 'master' to 'main'
 
