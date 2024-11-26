@@ -23,7 +23,7 @@
             </Policies>
         </RollingFile>
 
-        <RollingFile name="log_updates" append="true" fileName="logs/log_updates.log" filePattern="logs/log_updates.log.%d{yyyy-MM}">
+        <RollingFile name="updates" append="true" fileName="logs/updates.log" filePattern="logs/updates.log.%d{yyyy-MM}">
             <PatternLayout pattern="[%d] - %m%n"/>
             <Policies>
                 <TimeBasedTriggeringPolicy interval="1"/>
@@ -43,8 +43,8 @@
             <AppenderRef ref="Console" level="info"/>
         </Logger>
 
-        <Logger name="log_updates" level="debug" additivity="false">
-            <AppenderRef ref="log_updates"/>
+        <Logger name="updates" level="debug" additivity="false">
+            <AppenderRef ref="updates"/>
             <AppenderRef ref="Console" level="info"/>
         </Logger>
     </Loggers>

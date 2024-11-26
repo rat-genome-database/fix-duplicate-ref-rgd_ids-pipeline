@@ -21,7 +21,7 @@ public class fixDuplicateRefRgdIds {
 
     fixDuplicateRgdIdsDAO dao = new fixDuplicateRgdIdsDAO();
     private final Logger logStatus = LogManager.getLogger("status");
-    private final Logger logUpdates = LogManager.getLogger("log_updates");
+    private final Logger logUpdates = LogManager.getLogger("updates");
     private String version;
 
     public static void main(String args[]) throws Exception{
