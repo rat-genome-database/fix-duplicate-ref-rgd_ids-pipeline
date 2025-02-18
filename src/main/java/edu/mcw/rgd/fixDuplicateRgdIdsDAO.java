@@ -36,7 +36,7 @@ public class fixDuplicateRgdIdsDAO {
                 AND d.object_status='ACTIVE'  AND  x.xdb_key=2
               GROUP BY x.acc_id HAVING COUNT(x.acc_id) > 1
             )
-            ORDER BY a.acc_id";
+            ORDER BY a.acc_id
             """;
 
         XdbQuery q = new XdbQuery(annDao.getDataSource(), query);
