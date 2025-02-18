@@ -26,16 +26,18 @@ public class fixDuplicateRgdIdsDAO {
     //get all active rgdids that are more than one rgdid for given pubmed Id.
     public List<XdbId> getPubmedIdsWithMultipleReferenceRgdIds() throws Exception{
 
-        String query = "SELECT a.*  FROM rgd_acc_xdb a, references r, rgd_ids i\n" +
-                "WHERE a.rgd_id=r.rgd_id  AND  a.rgd_id=i.rgd_id\n" +
-                " AND i.object_status='ACTIVE'  AND   a.xdb_key=2" +
-                " AND a.ACC_ID IN(\n" +
-                "  SELECT acc_id FROM rgd_acc_xdb x, references f, rgd_ids d\n" +
-                "  WHERE x.rgd_id=f.rgd_id  AND  x.rgd_id=d.rgd_id\n" +
-                "    AND d.object_status='ACTIVE'  AND  x.xdb_key=2\n" +
-                "  GROUP BY x.acc_id HAVING COUNT(x.acc_id) > 1\n" +
-                ")\n" +
-                "ORDER BY a.acc_id";
+        String query = """
+            SELECT a.*  FROM rgd_acc_xdb a, references r, rgd_ids i
+            WHERE a.rgd_id=r.rgd_id  AND  a.rgd_id=i.rgd_id
+             AND i.object_status='ACTIVE'  AND   a.xdb_key=2
+             AND a.ACC_ID IN(
+              SELECT acc_id FROM rgd_acc_xdb x, references f, rgd_ids d
+              WHERE x.rgd_id=f.rgd_id  AND  x.rgd_id=d.rgd_id
+                AND d.object_status='ACTIVE'  AND  x.xdb_key=2
+              GROUP BY x.acc_id HAVING COUNT(x.acc_id) > 1
+            )
+            ORDER BY a.acc_id";
+            """;
 
         XdbQuery q = new XdbQuery(annDao.getDataSource(), query);
         return annDao.execute(q);

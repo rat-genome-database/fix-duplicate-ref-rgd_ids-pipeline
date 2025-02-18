@@ -1,6 +1,9 @@
 TODO:
     move sql code to rgdcore
 
+Feb 18, 2025
+  made sql more readable
+
 Nov 26, 2024
   upgraded to log4j2
 
