@@ -2,7 +2,7 @@
 
 <beans>
     <bean id="duplicateRgdIds" class="edu.mcw.rgd.fixDuplicateRefRgdIds">
-        <property name="version" value="FixDuplicateRefRgdIds   -- build Feb 18, 2025" />
+        <property name="version" value="FixDuplicateRefRgdIds   -- build May 22, 2025" />
     </bean>
 </beans>
 
