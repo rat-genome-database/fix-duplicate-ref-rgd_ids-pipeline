@@ -1,6 +1,7 @@
 TODO:
     move sql code to rgdcore
 
+Nov 17, 2025
 May 22, 2025
   updated dependencies
   

@@ -152,6 +152,7 @@ public class fixDuplicateRefRgdIds {
         }
 
         logMsg("OK! -- elapsed "+Utils.formatElapsedTime(time0, System.currentTimeMillis()));
+        logMsg("======");
     }
 
     void logMsg(String msg) {
