@@ -3,6 +3,7 @@ package edu.mcw.rgd;
 import edu.mcw.rgd.datamodel.RgdId;
 import edu.mcw.rgd.datamodel.XdbId;
 import edu.mcw.rgd.datamodel.ontology.Annotation;
+import edu.mcw.rgd.process.MemoryMonitor;
 import edu.mcw.rgd.process.Utils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -28,14 +29,18 @@ public class fixDuplicateRefRgdIds {
         DefaultListableBeanFactory bf = new DefaultListableBeanFactory();
         new XmlBeanDefinitionReader(bf).loadBeanDefinitions(new FileSystemResource("properties/AppConfigure.xml"));
         fixDuplicateRefRgdIds manager = (fixDuplicateRefRgdIds) (bf.getBean("duplicateRgdIds"));
+        MemoryMonitor memoryMonitor = new MemoryMonitor();
+        memoryMonitor.start();
         try {
             manager.run();
         } catch( Exception e) {
             Utils.printStackTrace(e, manager.logStatus);
             throw e;
+        } finally {
+            memoryMonitor.stop();
+            manager.logStatus.info(memoryMonitor.getSummary());
         }
     }
-
 
     public void run() throws Exception {
         long time0 = System.currentTimeMillis();

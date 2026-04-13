@@ -1,6 +1,9 @@
 TODO:
     move sql code to rgdcore
 
+Apr 13, 2026
+  added MemoryMonitor
+
 Nov 17, 2025
 May 22, 2025
   updated dependencies
