@@ -1,6 +1,9 @@
 TODO:
     move sql code to rgdcore
 
+Apr 17, 2026
+  renamed classes to follow Java naming conventions; updated dependencies
+
 Apr 13, 2026
   added MemoryMonitor
 

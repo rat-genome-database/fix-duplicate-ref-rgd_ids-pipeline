@@ -13,7 +13,7 @@ java {
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
 }
-mainClassName = 'edu.mcw.rgd.fixDuplicateRefRgdIds'
+mainClassName = 'edu.mcw.rgd.FixDuplicateRefRgdIds'
 String myAppName = 'fix-duplicate-ref-rgd-ids-pipeline'
 
 project.archivesBaseName = myAppName
@@ -23,12 +23,12 @@ repositories {
 }
 
 dependencies {
-    implementation ('org.apache.commons:commons-dbcp2:2.13.0') {
+    implementation ('org.apache.commons:commons-dbcp2:2.14.0') {
         exclude group: 'commons-logging', module: 'commons-logging'
     }
-    implementation 'org.apache.logging.log4j:log4j-core:2.25.2'
-    implementation 'com.oracle.database.jdbc:ojdbc11:23.26.0.0.0'
-    implementation 'org.springframework:spring-jdbc:7.0.1'
+    implementation 'org.apache.logging.log4j:log4j-core:2.25.3'
+    implementation 'com.oracle.database.jdbc:ojdbc11:23.26.1.0.0'
+    implementation 'org.springframework:spring-jdbc:7.0.2'
 
     implementation fileTree(dir: 'lib', include: '*.jar')
 }

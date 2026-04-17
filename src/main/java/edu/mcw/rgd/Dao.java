@@ -14,7 +14,7 @@ import java.util.List;
  * @author pjayaraman
  * @since 11/19/12
  */
-public class fixDuplicateRgdIdsDAO {
+public class Dao {
     AnnotationDAO annDao = new AnnotationDAO();
     RGDManagementDAO rgdDao = new RGDManagementDAO();
     AssociationDAO assDao = new AssociationDAO();

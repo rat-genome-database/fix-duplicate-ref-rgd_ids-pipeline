@@ -1,8 +1,8 @@
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
 
 <beans>
-    <bean id="duplicateRgdIds" class="edu.mcw.rgd.fixDuplicateRefRgdIds">
-        <property name="version" value="fix-duplicate-ref-rgd-ids-pipeline   -- build Apr 13, 2026" />
+    <bean id="duplicateRgdIds" class="edu.mcw.rgd.FixDuplicateRefRgdIds">
+        <property name="version" value="fix-duplicate-ref-rgd-ids-pipeline   -- build Apr 17, 2026" />
     </bean>
 </beans>
 
